@@ -59,3 +59,11 @@ Fruit.find((err, fruits) => {
         console.log(fruits);
     }
 });
+
+Person.find((err, people) => {
+    if (err) {
+        console.error(err);
+    } else {
+        console.log(people);
+    }
+})
