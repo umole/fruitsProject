@@ -38,32 +38,80 @@ const pawpaw = new Fruit({
 //fruit.save().then(() => console.log("Saved new fruits"));
 
 const personSchema = new mongoose.Schema({
-    name: String,
-    age: Number
+    name: {
+        type: String,
+        required: [true, 'Why no name?']
+    },
+    age: {
+        type: Number,
+        min: [18, 'Too young']
+    },
+    favoriteFruit: fruitSchema
 });
 
 const Person = new mongoose.model("Person", personSchema);
 
 const person = new Person({
-    name: "John Cena",
-    age: 37
+    name: "Dwayn Johnson",
+    age: 18,
+    favoriteFruit: fruit
+});
+
+// Fruit.deleteOne({name: 'Banana'}, (err) => {
+//     if (err) {
+//         console.error(err);
+//     } else {
+//         console.log("(Banana) successfully deleted");
+//     }
+// });
+
+Person.updateOne({name: 'John Cena'}, {favoriteFruit: pawpaw}, (err) => {
+    if (err) {
+        console.error(err);
+    } else {
+        console.log("Updated successfully");
+    }
 });
 
 //person.save().then(() => console.log("New person added to DB."));
 
+// Person.deleteOne({ name: 'Mike Tyson' }, (err) => {
+//     if (err) {
+//         console.error(err);
+//     } else {
+//         console.log("(Mike Tyson) Successfully deleted");
+//     }
+// });
+
+
 
 Fruit.find((err, fruits) => {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log(fruits);
+    let fruitNames = []
+    try {
+        for (eachFruit of fruits) {
+            const eachFruitName = eachFruit.name;
+            fruitNames.push(eachFruitName);
+        }
+        console.log(fruitNames);
+    } catch (error) {
+        console.error(error);
+    } finally {
+        mongoose.connection.close();
     }
 });
 
 Person.find((err, people) => {
-    if (err) {
+    try {
+        let peopleNames = [];
+        for (eachPerson of people) {
+            const eachPersonName = eachPerson.name;
+            console.log(eachPersonName);
+        }
+    } catch (err) {
         console.error(err);
-    } else {
-        console.log(people);
+    } finally {
+        //mongoose.connection.close();
     }
-})
+});
+
+
